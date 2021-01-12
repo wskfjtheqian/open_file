@@ -33,8 +33,10 @@ flutter:
     # then add platforms following the instruction here:
     # https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms
     # -------------------
-      some_platform:
-        pluginClass: somePluginClass
+      android:
+        pluginClass: OpenFilePlugin
+        package: com.exgou.open_file
+
     # -------------------
 
   # To add assets to your plugin package, add an assets section, like this:
