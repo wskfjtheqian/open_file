@@ -28,7 +28,9 @@ class _ImpBlob extends OBlob<Stream<List<int>>> {
       value.forEach((element) {
         ret.addAll(element);
       });
-      return Int8List.fromList(ret).buffer;
+      return Int8List
+          .fromList(ret)
+          .buffer;
     });
   }
 
@@ -61,7 +63,7 @@ class _ImpFile extends OFile<io.File> {
   @override
   String get name {
     var index = data.path.replaceAll(r"\\", "/").lastIndexOf("/");
-    return data.path.substring(-1 == index ? 0 : index);
+    return data.path.substring(index + 1);
   }
 
   @override
