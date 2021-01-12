@@ -59,7 +59,7 @@ class _ImpFile extends OFile<io.File> {
   DateTime get lastModifiedDate => data.lastModifiedSync();
 
   @override
-  String get name => data.path;
+  String get name => data.path.substring(data.path.replaceAll(r"\\", "/").lastIndexOf("/"));
 
   @override
   String get path => data.path;
