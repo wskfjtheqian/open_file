@@ -84,6 +84,7 @@
       <workItem from="1610436244584" duration="367000" />
       <workItem from="1610436792116" duration="72000" />
       <workItem from="1610438447670" duration="129000" />
+      <workItem from="1610439787515" duration="737000" />
     </task>
     <task id="LOCAL-00001" summary="添加">
       <created>1610423720985</created>
@@ -141,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610438568979</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="添加Android">
+      <created>1610440016238</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1610440016238</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,10 +225,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="448" y="92" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1610424434031" />
-    <state x="560" y="251" key="Vcs.Push.Dialog.v2" timestamp="1610438569969">
+    <state x="560" y="251" key="Vcs.Push.Dialog.v2" timestamp="1610440017193">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610438569969" />
+    <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610440017193" />
     <state x="100" y="100" width="1720" height="840" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1610330812190">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
