@@ -54,20 +54,20 @@ class _MyAppState extends State<MyApp> {
               // xhr.send(bb.data);
               // print(DateTime.now().millisecondsSinceEpoch - tt.millisecondsSinceEpoch);
               //
-              // Dio(BaseOptions(baseUrl: "http://192.168.2.40:8822", headers: {
-              //   HttpHeaders.contentLengthHeader: aa[0].size,
-              // })).post("/api/update_file1.api", data: bb.readStream(), onSendProgress: (int count, int total) {
-              //   setState(() {
-              //     _count = count;
-              //     _total = total;
-              //   });
-              // });
-              print(await aa[0].md5(onProgress: (int count, int total) {
+              Dio(BaseOptions(baseUrl: "http://192.168.2.40:8822", headers: {
+                HttpHeaders.contentLengthHeader: aa[0].size,
+              })).post("/api/update_file1.api", data: bb.readStream(), onSendProgress: (int count, int total) {
                 setState(() {
                   _count = count;
                   _total = total;
                 });
-              }));
+              });
+              // print(await aa[0].md5(onProgress: (int count, int total) {
+              //   setState(() {
+              //     _count = count;
+              //     _total = total;
+              //   });
+              // }));
             },
           ),
         ),
