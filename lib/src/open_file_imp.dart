@@ -8,10 +8,11 @@ import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:file_chooser/file_chooser.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 
-const MethodChannel _channel = const MethodChannel('open_file');
+const MethodChannel _channel = const MethodChannel('com.exgou.openFile');
 
 class _ImpBlob extends OBlob<Stream<List<int>>> {
   Stream<List<int>> _data;
@@ -41,7 +42,6 @@ class _ImpBlob extends OBlob<Stream<List<int>>> {
   String get type => "Blob";
 
   @override
-
   @override
   OBlob slice([int start, int end]) {
     return null;
@@ -83,12 +83,29 @@ class _ImpFile extends OFile<io.File> {
   }
 }
 
+enum FileType {
+  any,
+  media,
+  image,
+  video,
+  audio,
+  custom,
+}
+
 Future<List<OFile>> OpenFileImp({allowsMultipleSelection = true, String accept = "*"}) async {
   if (io.Platform.isWindows || io.Platform.isLinux || io.Platform.isMacOS) {
     return showOpenPanel().then<List<_ImpFile>>((value) {
       return value.paths.map<_ImpFile>((e) => _ImpFile(io.File(e))).toList();
     });
   } else {
-    return Future.value([]);
+    final String type = describeEnum(FileType.any);
+    return await _channel.invokeListMethod(type, {
+      'allowMultipleSelection': allowsMultipleSelection,
+      'allowedExtensions': [accept],
+      'allowCompression': false,
+      'withData': false,
+    }).then<List<_ImpFile>>((value) {
+      return value.map<_ImpFile>((e) => _ImpFile(io.File(e))).toList();
+    });
   }
 }
