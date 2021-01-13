@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'dart:html' as html;
@@ -39,7 +40,6 @@ class _MyAppState extends State<MyApp> {
             onTap: () async {
               var aa = await openFile();
               // var tt = DateTime.now();
-              var bb = await aa[0];
               // print(DateTime.now().millisecondsSinceEpoch - tt.millisecondsSinceEpoch);
               // var xhr = new html.HttpRequest();
               // xhr.open("post", "http://192.168.2.40:8822/api/update_file1.api");
@@ -54,14 +54,28 @@ class _MyAppState extends State<MyApp> {
               // xhr.send(bb.data);
               // print(DateTime.now().millisecondsSinceEpoch - tt.millisecondsSinceEpoch);
               //
-              Dio(BaseOptions(baseUrl: "http://192.168.2.40:8822", headers: {
-                HttpHeaders.contentLengthHeader: aa[0].size,
-              })).post("/api/update_file1.api", data: bb.readStream(), onSendProgress: (int count, int total) {
-                setState(() {
-                  _count = count;
-                  _total = total;
-                });
-              });
+
+              var _dio = Dio(BaseOptions(baseUrl: "https://192.168.2.40:8822"));
+              if (_dio.httpClientAdapter is DefaultHttpClientAdapter) {
+                (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+                  client.badCertificateCallback = (X509Certificate cert, String host, int port) {
+                    return true;
+                  };
+                };
+              }
+              await _dio.post(
+                "/api/update_file1.api",
+                data: aa[0].readStream(),
+                queryParameters: {"fileName": "fileName.mp4"},
+                options: Options(headers: {HttpHeaders.contentLengthHeader: aa[0].size}),
+                onSendProgress: (int count, int total) {
+                  setState(() {
+                    _count = count;
+                    _total = total;
+                  });
+                },
+              );
+
               // print(await aa[0].md5(onProgress: (int count, int total) {
               //   setState(() {
               //     _count = count;

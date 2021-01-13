@@ -35,12 +35,12 @@ abstract class OFile<T> extends OBlob<T> {
   Stream<List<int>> readStream([int start, int end]);
 
   @override
-  Future<String> md5({bool allHash, void onProgress(int count, int total)}) async {
+  Future<String> md5({bool allHash = false, void onProgress(int count, int total)}) async {
     var output = new AccumulatorSink<Digest>();
     var input = sha1.startChunkedConversion(output);
     var s = size;
     if (s < 1024 * 1024 * 10 || null == allHash) {
-      allHash = false;
+      allHash = true;
     }
 
     if (allHash) {

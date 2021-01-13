@@ -28,9 +28,7 @@ class _ImpBlob extends OBlob<Stream<List<int>>> {
       value.forEach((element) {
         ret.addAll(element);
       });
-      return Int8List
-          .fromList(ret)
-          .buffer;
+      return Int8List.fromList(ret).buffer;
     });
   }
 
