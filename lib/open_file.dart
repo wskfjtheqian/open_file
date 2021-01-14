@@ -33,6 +33,8 @@ abstract class OFile<T> extends OBlob<T> {
   int get size;
 
   Stream<List<int>> readStream([int start, int end]);
+  
+  OBlob slice([int start, int end]);
 
   @override
   Future<String> md5({bool allHash = false, void onProgress(int count, int total)}) async {

@@ -60,7 +60,7 @@ class _ImpFile extends OFile<io.File> {
 
   @override
   String get name {
-    var index = data.path.replaceAll(r"\\", "/").lastIndexOf("/");
+    var index = data.path.replaceAll(r"\", "/").lastIndexOf("/");
     return data.path.substring(index + 1);
   }
 

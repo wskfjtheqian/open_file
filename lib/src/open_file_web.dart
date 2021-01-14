@@ -162,7 +162,7 @@ class _WebFile extends OFile<html.File> {
 
   @override
   OBlob slice([int start, int end]) {
-    return _WebBlob._(data.slice(start, end));
+    return _WebBlob._(data.slice(start, end ?? size));
   }
 
   @override
