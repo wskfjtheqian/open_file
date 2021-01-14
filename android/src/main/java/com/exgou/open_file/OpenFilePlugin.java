@@ -17,6 +17,7 @@ import java.util.HashMap;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.embedding.engine.plugins.lifecycle.HiddenLifecycleReference;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
@@ -32,8 +33,7 @@ public class OpenFilePlugin implements MethodChannel.MethodCallHandler, FlutterP
     private static final String CHANNEL = "com.exgou.openFile";
     private static final String EVENT_CHANNEL = "com.exgou.openFileEvent";
 
-    private class LifeCycleObserver
-            implements Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
+    private class LifeCycleObserver implements Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
         private final Activity thisActivity;
 
         LifeCycleObserver(final Activity activity) {
@@ -267,7 +267,7 @@ public class OpenFilePlugin implements MethodChannel.MethodCallHandler, FlutterP
             activityBinding.addActivityResultListener(this.delegate);
             activityBinding.addRequestPermissionsResultListener(this.delegate);
 
-            this.lifecycle = (Lifecycle) activityBinding.getLifecycle();
+            this.lifecycle = ((HiddenLifecycleReference) activityBinding.getLifecycle()).getLifecycle();
             this.lifecycle.addObserver(this.observer);
         }
     }
