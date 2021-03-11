@@ -45,7 +45,7 @@ class _ImpFile extends OFile {
       name: map['name']?.toString(),
       path: map['path']?.toString(),
       uri: map['uri']?.toString(),
-      lastModifiedDate: null == (temp = map['lastModifiedDate']) ? null : (temp is DateTime ? temp : DateTime.tryParse(temp)),
+      lastModifiedDate: null == (temp = map['lastModifiedDate']) ? null : (temp is DateTime ? temp : DateTime.fromMillisecondsSinceEpoch(temp * 1000)),
       size: null == (temp = map['size']) ? null : (temp is num ? temp.toInt() : int.tryParse(temp)),
     );
   }

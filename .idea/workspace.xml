@@ -21,8 +21,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2c8444a8-98e5-4910-a372-f90085107f58" name="Default Changelist" comment="修改Android不能读取文件的BUG">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/open_file_android.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/open_file_android.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/open_file_imp.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/open_file_imp.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +40,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/example/lib/main.dart" root0="SKIP_INSPECTION" />
@@ -117,7 +126,9 @@
       <workItem from="1615367719610" duration="6605000" />
       <workItem from="1615429087102" duration="304000" />
       <workItem from="1615429556215" duration="503000" />
-      <workItem from="1615430075490" duration="6986000" />
+      <workItem from="1615430075490" duration="7069000" />
+      <workItem from="1615443012400" duration="4000" />
+      <workItem from="1615443677806" duration="3522000" />
     </task>
     <task id="LOCAL-00001" summary="添加">
       <created>1610423720985</created>
@@ -210,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615442550764</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="修改Android不能读取文件的BUG">
+      <created>1615442750332</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1615442750332</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

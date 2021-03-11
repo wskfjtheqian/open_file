@@ -8,11 +8,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.storage.StorageManager;
 import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
-import androidx.annotation.Nullable;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -101,25 +100,27 @@ public class FileUtils {
         long size = 0;
         String path = "";
         String fileName = "";
+        Long lastModifiedDate = null;
         try {
             if (uri.getScheme().equals("content")) {
-                Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null);
+                Cursor cursor = context.getContentResolver().query(uri, new String[]{
+                        OpenableColumns.DISPLAY_NAME,
+                        OpenableColumns.SIZE,
+                        MediaStore.MediaColumns.DATA,
+                        MediaStore.MediaColumns.DATE_MODIFIED,
+                }, null, null, null);
+
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
-                        path = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+                        lastModifiedDate = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_MODIFIED));
                         size = cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE));
                     }
                 } finally {
                     cursor.close();
                 }
             }
-//            if (result == null) {
-//                result = uri.getPath();
-//                int cut = result.lastIndexOf('/');
-//                if (cut != -1) {
-//                    result = result.substring(cut + 1);
-//                }
-//            }
         } catch (Exception ex) {
             Log.e(TAG, "Failed to handle file name: " + ex.toString());
         }
@@ -128,6 +129,7 @@ public class FileUtils {
                 .withPath(path)
                 .withName(fileName)
                 .withSize(size)
+                .withLastModifiedDate(lastModifiedDate)
                 .withUri(uri.toString());
         return fileInfo.build();
     }
@@ -186,8 +188,7 @@ public class FileUtils {
         }).start();
     }
 
-    @Nullable
-    public static String getFullPathFromTreeUri(@Nullable final Uri treeUri, Context con) {
+    public static String getFullPathFromTreeUri(final Uri treeUri, Context con) {
         if (treeUri == null) {
             return null;
         }
