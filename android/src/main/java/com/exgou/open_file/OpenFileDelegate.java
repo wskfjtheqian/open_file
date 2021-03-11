@@ -26,7 +26,7 @@ import io.flutter.plugin.common.PluginRegistry;
 
 public class OpenFileDelegate implements PluginRegistry.ActivityResultListener, PluginRegistry.RequestPermissionsResultListener {
 
-    private static final String TAG = "FilePickerDelegate";
+    private static final String TAG = "OpenFileDelegate";
     private static final int REQUEST_CODE = (OpenFilePlugin.class.hashCode() + 43) & 0x0000ffff;
 
     private final Activity activity;
@@ -73,7 +73,7 @@ public class OpenFileDelegate implements PluginRegistry.ActivityResultListener, 
     @Override
     public boolean onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 
-        if (type == null) {
+        if(type == null) {
             return false;
         }
 
@@ -83,59 +83,66 @@ public class OpenFileDelegate implements PluginRegistry.ActivityResultListener, 
                 eventSink.success(true);
             }
 
-            if (data != null) {
-                final ArrayList<String> files = new ArrayList<>();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (data != null) {
+                        final ArrayList<FileInfo> files = new ArrayList<>();
 
-                if (data.getClipData() != null) {
-                    final int count = data.getClipData().getItemCount();
-                    int currentItem = 0;
-                    while (currentItem < count) {
-                        final Uri currentUri = data.getClipData().getItemAt(currentItem).getUri();
-                        final String file = FileUtils.getRealPathFromURI(activity.getBaseContext(), currentUri);
+                        if (data.getClipData() != null) {
+                            final int count = data.getClipData().getItemCount();
+                            int currentItem = 0;
+                            while (currentItem < count) {
+                                final Uri currentUri = data.getClipData().getItemAt(currentItem).getUri();
+                                final FileInfo file = FileUtils.openFileInfo(OpenFileDelegate.this.activity, currentUri);
 
-                        if (file != null) {
-                            files.add(file);
-                            Log.d(OpenFileDelegate.TAG, "[MultiFilePick] File #" + currentItem + " - URI: " + currentUri.getPath());
-                        }
-                        currentItem++;
-                    }
+                                if(file != null) {
+                                    files.add(file);
+                                    Log.d(OpenFileDelegate.TAG, "[MultiFilePick] File #" + currentItem + " - URI: " + currentUri.getPath());
+                                }
+                                currentItem++;
+                            }
 
-                    finishWithSuccess(files);
-                } else if (data.getData() != null) {
-                    Uri uri = data.getData();
+                            finishWithSuccess(files);
+                        } else if (data.getData() != null) {
+                            Uri uri = data.getData();
 
-                    if (type.equals("dir") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        uri = DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
+                            if (type.equals("dir") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                uri = DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
 
-                        Log.d(OpenFileDelegate.TAG, "[SingleFilePick] File URI:" + uri.toString());
-                        final String dirPath = FileUtils.getRealPathFromURI(activity.getBaseContext(), uri);
+                                Log.d(OpenFileDelegate.TAG, "[SingleFilePick] File URI:" + uri.toString());
+                                final String dirPath = FileUtils.getFullPathFromTreeUri(uri, activity);
 
-                        if (dirPath != null) {
-                            finishWithSuccess(dirPath);
+                                if(dirPath != null) {
+                                    finishWithSuccess(dirPath);
+                                } else {
+                                    finishWithError("unknown_path", "Failed to retrieve directory path.");
+                                }
+                                return;
+                            }
+
+                            final FileInfo file = FileUtils.openFileInfo(OpenFileDelegate.this.activity, uri);
+
+                            if(file != null) {
+                                files.add(file);
+                            }
+
+                            if (!files.isEmpty()) {
+                                Log.d(OpenFileDelegate.TAG, "File path:" + files.toString());
+                                finishWithSuccess(files);
+                            } else {
+                                finishWithError("unknown_path", "Failed to retrieve path.");
+                            }
+
                         } else {
-                            finishWithError("unknown_path", "Failed to retrieve directory path.");
+                            finishWithError("unknown_activity", "Unknown activity error, please fill an issue.");
                         }
-                        return true;
-                    }
-
-                    final String file = FileUtils.getRealPathFromURI(activity.getBaseContext(), uri);
-                    if (file != null) {
-                        files.add(file);
-                    }
-
-                    if (!files.isEmpty()) {
-                        Log.d(OpenFileDelegate.TAG, "File path:" + files.toString());
-                        finishWithSuccess(files);
                     } else {
-                        finishWithError("unknown_path", "Failed to retrieve path.");
+                        finishWithError("unknown_activity", "Unknown activity error, please fill an issue.");
                     }
-
-                } else {
-                    finishWithError("unknown_activity", "Unknown activity error, please fill an issue.");
                 }
-            } else {
-                finishWithError("unknown_activity", "Unknown activity error, please fill an issue.");
-            }
+            }).start();
+            return true;
 
         } else if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_CANCELED) {
             Log.i(TAG, "User cancelled the picker request");
@@ -242,13 +249,14 @@ public class OpenFileDelegate implements PluginRegistry.ActivityResultListener, 
             this.dispatchEventStatus(false);
         }
 
-
+        // Temporary fix, remove this null-check after Flutter Engine 1.14 has landed on stable
         if (this.pendingResult != null) {
-            if (data != null && !(data instanceof String)) {
-                final ArrayList<String> files = new ArrayList<>();
 
-                for (String file : (ArrayList<String>) data) {
-                    files.add(file);
+            if(data != null && !(data instanceof String)) {
+                final ArrayList<HashMap<String, Object>> files = new ArrayList<>();
+
+                for (FileInfo file : (ArrayList<FileInfo>)data) {
+                    files.add(file.toMap());
                 }
                 data = files;
             }

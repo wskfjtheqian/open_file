@@ -2,6 +2,7 @@ package com.exgou.open_file;
 
 import android.app.Activity;
 import android.app.Application;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,7 +34,8 @@ public class OpenFilePlugin implements MethodChannel.MethodCallHandler, FlutterP
     private static final String CHANNEL = "com.exgou.openFile";
     private static final String EVENT_CHANNEL = "com.exgou.openFileEvent";
 
-    private class LifeCycleObserver implements Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
+    private class LifeCycleObserver
+            implements Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
         private final Activity thisActivity;
 
         LifeCycleObserver(final Activity activity) {
@@ -149,16 +151,24 @@ public class OpenFilePlugin implements MethodChannel.MethodCallHandler, FlutterP
 
         fileType = OpenFilePlugin.resolveType(call.method);
         String[] allowedExtensions = null;
+        if ("read_stream".equals(call.method)) {
+            FileUtils.openFileInfo(
+                    activity.getBaseContext(),
+                    Uri.parse((String) arguments.get("uri")),
+                    (Long) arguments.get("id")
+            );
+            rawResult.success(null);
+            return;
+        }
 
         if (fileType == null) {
             result.notImplemented();
-        } else if (fileType != "dir") {
+        } else if (!fileType.equals("dir")) {
             isMultipleSelection = (boolean) arguments.get("allowMultipleSelection");
             withData = (boolean) arguments.get("withData");
             allowedExtensions = FileUtils.getMimeTypes((ArrayList<String>) arguments.get("allowedExtensions"));
         }
-
-        if (fileType == "custom" && (allowedExtensions == null || allowedExtensions.length == 0)) {
+        if (fileType.equals("custom") && (allowedExtensions == null || allowedExtensions.length == 0)) {
             result.error(TAG, "Unsupported filter. Make sure that you are only using the extension without the dot, (ie., jpg instead of .jpg). This could also have happened because you are using an unsupported file extension.  If the problem persists, you may want to consider using FileType.all instead.", null);
         } else {
             this.delegate.startFileExplorer(fileType, isMultipleSelection, withData, allowedExtensions, result);

@@ -1,15 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.exgou.open_file">
+          package="com.exgou.open_file">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <application>
-        <provider
-                android:name="com.exgou.open_file.OpenFileProvider"
-                android:authorities="${applicationId}.flutter.open_file_provider"
-                android:exported="false"
-                android:grantUriPermissions="true">
-            <meta-data
-                    android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/flutter_open_file_paths"/>
-        </provider>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT"/>
+            <data android:mimeType="*/*"/>
+        </intent>
+    </queries>
+    <application
+            android:usesCleartextTraffic="true"
+            android:networkSecurityConfig="@xml/network_security_config">
     </application>
 </manifest>

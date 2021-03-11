@@ -11,213 +11,23 @@ import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
 import androidx.annotation.Nullable;
 
 import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.content.ContentUris;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.FileProvider;
-
-import java.io.File;
-import java.text.DecimalFormat;
-
-/**
- * Created by DB_BOY on 2019/6/24.</br>
- */
 public class FileUtils {
-    private static final String TAG = "OpenFileUtils";
+
+    private static final String TAG = "FilePickerUtils";
     private static final String PRIMARY_VOLUME_NAME = "primary";
-
-    public static String readFileSize(String path) {
-        return readableFileSize(new File(path).length());
-    }
-
-    public static String readableFileSize(long size) {
-        if (size <= 0)
-            return "0";
-        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
-        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
-    }
-
-
-    /**
-     * file --> uri
-     *
-     * @param context
-     * @param file
-     * @return
-     */
-    public static Uri getUriFromFile(Context context, File file) {
-        if (context == null || file == null) {
-            throw new NullPointerException();
-        }
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context.getApplicationContext(), context.getPackageName() + ".fileprovider", file);
-        } else {
-            uri = Uri.fromFile(file);
-        }
-        return uri;
-    }
-
-    /**
-     * 专为Android4.4设计的从Uri获取文件绝对路径，以前的方法已不好使
-     */
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String getPath(final Context context, final Uri uri) {
-
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            //一些三方的文件浏览器会进入到这个方法中，例如ES
-            //QQ文件管理器不在此列
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{split[1]};
-
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {// MediaStore (and general)
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
-
-
-            if (isQQMediaDocument(uri)) {
-                String path = uri.getPath();
-                File fileDir = Environment.getExternalStorageDirectory();
-                File file = new File(fileDir, path.substring("/QQBrowser".length(), path.length()));
-                return file.exists() ? file.toString() : null;
-            }
-
-            return getDataColumn(context, uri, null, null);
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {// File
-
-            return uri.getPath();
-        }
-        return null;
-    }
-
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = MediaStore.MediaColumns.DATA;
-        final String[] projection = {column};
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
-
-    public static String getRealPathFromURI(Context context, Uri contentUri) {
-        return getDataColumn(context, contentUri, null, null);
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-
-    /**
-     * 使用第三方qq文件管理器打开
-     *
-     * @param uri
-     * @return
-     */
-    public static boolean isQQMediaDocument(Uri uri) {
-        return "com.tencent.mtt.fileprovider".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
-    }
 
     public static String[] getMimeTypes(final ArrayList<String> allowedExtensions) {
 
@@ -239,5 +49,225 @@ public class FileUtils {
         Log.d(TAG, "Allowed file extensions mimes: " + mimes);
         return mimes.toArray(new String[0]);
     }
-}
 
+    public static String getFileName(Uri uri, final Context context) {
+        String result = null;
+
+        try {
+
+            if (uri.getScheme().equals("content")) {
+                Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null);
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+            if (result == null) {
+                result = uri.getPath();
+                int cut = result.lastIndexOf('/');
+                if (cut != -1) {
+                    result = result.substring(cut + 1);
+                }
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "Failed to handle file name: " + ex.toString());
+        }
+
+        return result;
+    }
+
+    public static boolean clearCache(final Context context) {
+        try {
+            final File cacheDir = new File(context.getCacheDir() + "/file_picker/");
+            final File[] files = cacheDir.listFiles();
+
+            if (files != null) {
+                for (final File file : files) {
+                    file.delete();
+                }
+            }
+        } catch (final Exception ex) {
+            Log.e(TAG, "There was an error while clearing cached files: " + ex.toString());
+            return false;
+        }
+        return true;
+    }
+
+    public static FileInfo openFileInfo(final Context context, final Uri uri) {
+        final FileInfo.Builder fileInfo = new FileInfo.Builder();
+        long size = 0;
+        String path = "";
+        String fileName = "";
+        try {
+            if (uri.getScheme().equals("content")) {
+                Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null);
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        path = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        size = cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE));
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+//            if (result == null) {
+//                result = uri.getPath();
+//                int cut = result.lastIndexOf('/');
+//                if (cut != -1) {
+//                    result = result.substring(cut + 1);
+//                }
+//            }
+        } catch (Exception ex) {
+            Log.e(TAG, "Failed to handle file name: " + ex.toString());
+        }
+
+        fileInfo
+                .withPath(path)
+                .withName(fileName)
+                .withSize(size)
+                .withUri(uri.toString());
+        return fileInfo.build();
+    }
+
+
+    public static void openFileInfo(final Context context, final Uri uri, final Long id) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "run: openFileStream", null);
+                HttpURLConnection connection = null;
+                InputStream in = null;
+                OutputStream out = null;
+                try {
+                    in = context.getContentResolver().openInputStream(uri);
+
+                    URL url = new URL("http://127.0.0.1:9560?id=" + id);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setConnectTimeout(15000);
+                    connection.setReadTimeout(60000);
+                    connection.setDoOutput(true);
+                    connection.setRequestProperty("accept", "*/*");
+                    connection.setRequestProperty("connection", "Keep-Alive");
+                    connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+                    connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                    out = connection.getOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int len = in.read(buffer);
+                    while (len != -1) {
+                        out.write(buffer, 0, len);
+                        len = in.read(buffer);
+                    }
+                    out.flush();
+                    if (connection.getResponseCode() == 200) {
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (null != in) {
+                            in.close();
+                        }
+                    } catch (Exception e) {
+                    }
+                    try {
+                        if (null != out) {
+                            out.close();
+                        }
+                    } catch (Exception e) {
+                    }
+                    connection.disconnect();
+                }
+            }
+        }).start();
+    }
+
+    @Nullable
+    public static String getFullPathFromTreeUri(@Nullable final Uri treeUri, Context con) {
+        if (treeUri == null) {
+            return null;
+        }
+
+        String volumePath = getVolumePath(getVolumeIdFromTreeUri(treeUri), con);
+        FileInfo.Builder fileInfo = new FileInfo.Builder();
+
+        if (volumePath == null) {
+            return File.separator;
+        }
+
+        if (volumePath.endsWith(File.separator))
+            volumePath = volumePath.substring(0, volumePath.length() - 1);
+
+        String documentPath = getDocumentPathFromTreeUri(treeUri);
+
+        if (documentPath.endsWith(File.separator))
+            documentPath = documentPath.substring(0, documentPath.length() - 1);
+
+        if (documentPath.length() > 0) {
+            if (documentPath.startsWith(File.separator)) {
+                return volumePath + documentPath;
+            } else {
+                return volumePath + File.separator + documentPath;
+            }
+        } else {
+            return volumePath;
+        }
+    }
+
+
+    @SuppressLint("ObsoleteSdkInt")
+    private static String getVolumePath(final String volumeId, Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return null;
+        try {
+            StorageManager mStorageManager =
+                    (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+            Class<?> storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
+            Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
+            Method getUuid = storageVolumeClazz.getMethod("getUuid");
+            Method getPath = storageVolumeClazz.getMethod("getPath");
+            Method isPrimary = storageVolumeClazz.getMethod("isPrimary");
+            Object result = getVolumeList.invoke(mStorageManager);
+
+            final int length = Array.getLength(result);
+            for (int i = 0; i < length; i++) {
+                Object storageVolumeElement = Array.get(result, i);
+                String uuid = (String) getUuid.invoke(storageVolumeElement);
+                Boolean primary = (Boolean) isPrimary.invoke(storageVolumeElement);
+
+                // primary volume?
+                if (primary && PRIMARY_VOLUME_NAME.equals(volumeId))
+                    return (String) getPath.invoke(storageVolumeElement);
+
+                // other volumes?
+                if (uuid != null && uuid.equals(volumeId))
+                    return (String) getPath.invoke(storageVolumeElement);
+            }
+            // not found.
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static String getVolumeIdFromTreeUri(final Uri treeUri) {
+        final String docId = DocumentsContract.getTreeDocumentId(treeUri);
+        final String[] split = docId.split(":");
+        if (split.length > 0) return split[0];
+        else return null;
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static String getDocumentPathFromTreeUri(final Uri treeUri) {
+        final String docId = DocumentsContract.getTreeDocumentId(treeUri);
+        final String[] split = docId.split(":");
+        if ((split.length >= 2) && (split[1] != null)) return split[1];
+        else return File.separator;
+    }
+
+}
