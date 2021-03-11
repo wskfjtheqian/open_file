@@ -97,7 +97,9 @@ class _ImpFile extends OFile {
   int get size => _size;
 
   @override
-  OBlob slice([int start, int end]) {}
+  OBlob slice([int start, int end]) {
+    return ImpBlob(readStream(start, end), end - start);
+  }
 }
 
 Future<List<OFile>> OpenFileImp({allowsMultipleSelection = true, String accept = "*"}) async {

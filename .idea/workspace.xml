@@ -19,18 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c8444a8-98e5-4910-a372-f90085107f58" name="Default Changelist" comment="修改Android BUG">
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/src/open_file_android.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+    <list default="true" id="2c8444a8-98e5-4910-a372-f90085107f58" name="Default Changelist" comment="修改Android不能读取文件的BUG">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/OpenFileDelegate.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/OpenFileDelegate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/OpenFilePlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/OpenFilePlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/OpenFileProvider.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/res/xml/flutter_open_file_paths.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/open_file_android.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/open_file_android.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/open_file_imp.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/open_file_imp.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,6 +77,19 @@
       <recent name="com.exgou.open_file" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -113,7 +117,7 @@
       <workItem from="1615367719610" duration="6605000" />
       <workItem from="1615429087102" duration="304000" />
       <workItem from="1615429556215" duration="503000" />
-      <workItem from="1615430075490" duration="6670000" />
+      <workItem from="1615430075490" duration="6986000" />
     </task>
     <task id="LOCAL-00001" summary="添加">
       <created>1610423720985</created>
@@ -199,7 +203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610528472286</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="修改Android不能读取文件的BUG">
+      <created>1615442550764</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1615442550764</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -220,7 +231,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="添加" />
     <MESSAGE value="添加Android" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加Android" />
+    <MESSAGE value="修改Android不能读取文件的BUG" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改Android不能读取文件的BUG" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

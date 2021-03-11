@@ -13,12 +13,12 @@ import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:open_file/src/open_file_android.dart' as android;
 
-class _ImpBlob extends OBlob<Stream<List<int>>> {
+class ImpBlob extends OBlob<Stream<List<int>>> {
   Stream<List<int>> _data;
 
   int _size;
 
-  _ImpBlob._(this._data, this._size);
+  ImpBlob(this._data, this._size);
 
   @override
   Future<ByteBuffer> get byteBuffer async {
@@ -71,7 +71,7 @@ class _ImpFile extends OFile<io.File> {
 
   @override
   OBlob slice([int start, int end]) {
-    return _ImpBlob._(data.openRead(start, end), end - start);
+    return ImpBlob(data.openRead(start, end), end - start);
   }
 
   @override
