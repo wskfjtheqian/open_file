@@ -20,10 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2c8444a8-98e5-4910-a372-f90085107f58" name="Default Changelist" comment="修改Android不能读取文件的BUG">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/exgou/open_file/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/open_file_android.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/open_file_android.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,13 +60,14 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/example/android" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -82,22 +83,12 @@
       <recent name="$PROJECT_DIR$/android/src/main" />
       <recent name="$PROJECT_DIR$/lib/src" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/android/src/main" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.exgou.open_file" />
     </key>
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -129,6 +120,7 @@
       <workItem from="1615430075490" duration="7069000" />
       <workItem from="1615443012400" duration="4000" />
       <workItem from="1615443677806" duration="3522000" />
+      <workItem from="1619059364772" duration="33000" />
     </task>
     <task id="LOCAL-00001" summary="添加">
       <created>1610423720985</created>
