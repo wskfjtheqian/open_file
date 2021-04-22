@@ -21,9 +21,14 @@
   <component name="ChangeListManager">
     <list default="true" id="2c8444a8-98e5-4910-a372-f90085107f58" name="Default Changelist" comment="修改Android不能读取文件的BUG">
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/open_file.iml" beforeDir="false" afterPath="$PROJECT_DIR$/open_file.iml" afterDir="false" />
+>>>>>>> bd6b5ecb66a1d0b94a3e38aa5e383baf599283e9
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +125,11 @@
       <workItem from="1615430075490" duration="7069000" />
       <workItem from="1615443012400" duration="4000" />
       <workItem from="1615443677806" duration="3522000" />
+<<<<<<< HEAD
       <workItem from="1619059364772" duration="33000" />
+=======
+      <workItem from="1616688410857" duration="695000" />
+>>>>>>> bd6b5ecb66a1d0b94a3e38aa5e383baf599283e9
     </task>
     <task id="LOCAL-00001" summary="添加">
       <created>1610423720985</created>
