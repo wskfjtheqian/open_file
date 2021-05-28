@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class FileUtils {
 
-    private static final String TAG = "FilePickerUtils";
+    private static final String TAG = "OpenFileUtils";
     private static final String PRIMARY_VOLUME_NAME = "primary";
 
     public static String[] getMimeTypes(final ArrayList<String> allowedExtensions) {

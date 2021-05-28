@@ -5,6 +5,7 @@
 
 import 'dart:async';
 import 'dart:io' as io;
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_chooser/file_chooser.dart';
@@ -12,6 +13,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:open_file/src/open_file_android.dart' as android;
+
+MethodChannel channel;
+enum FileType {
+  any,
+  media,
+  image,
+  video,
+  audio,
+  custom,
+}
+
 
 class ImpBlob extends OBlob<Stream<List<int>>> {
   Stream<List<int>> _data;
@@ -86,6 +98,8 @@ class _ImpFile extends OFile<io.File> {
 }
 
 
+
+
 Future<List<OFile>> OpenFileImp({allowsMultipleSelection = true, String accept = "*"}) async {
   if (io.Platform.isWindows || io.Platform.isLinux || io.Platform.isMacOS) {
     return showOpenPanel().then<List<_ImpFile>>((value) {
@@ -93,5 +107,24 @@ Future<List<OFile>> OpenFileImp({allowsMultipleSelection = true, String accept =
     });
   } else if (io.Platform.isAndroid) {
     return android.OpenFileImp(allowsMultipleSelection: allowsMultipleSelection, accept: accept);
+  } else if (io.Platform.isIOS) {
+    return _IosOpenFileImp(allowsMultipleSelection: allowsMultipleSelection,accept: accept);
   }
+}
+
+Future<List<OFile>> _IosOpenFileImp({allowsMultipleSelection = true, String accept = "*"}) async {
+  if (null == channel) {
+    channel = const MethodChannel('com.exgou.openFile');
+  }
+
+
+  final String type = describeEnum(FileType.any);
+  return await channel.invokeListMethod(type, {
+    'allowMultipleSelection': allowsMultipleSelection,
+    'allowedExtensions': [accept],
+    'allowCompression': false,
+    'withData': false,
+  }).then<List<_ImpFile>>((value) {
+    return (value??[]).map<_ImpFile>((e) => _ImpFile(File(e))).toList();
+  });
 }

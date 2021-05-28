@@ -7,17 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:open_file/src/open_file_imp.dart';
 
-MethodChannel _channel;
+
 Map<int, StreamController<List<int>>> _streamMap = {};
 
-enum FileType {
-  any,
-  media,
-  image,
-  video,
-  audio,
-  custom,
-}
 
 class _ImpFile extends OFile {
   String _uri;
@@ -80,7 +72,7 @@ class _ImpFile extends OFile {
   Stream<List<int>> readStream([int start, int end]) {
     var stream = StreamController<List<int>>.broadcast();
     var id = DateTime.now().microsecondsSinceEpoch;
-    _channel.invokeMethod("read_stream", {
+    channel.invokeMethod("read_stream", {
       "uri": _uri,
       "id": id,
       "start": start,
@@ -103,8 +95,8 @@ class _ImpFile extends OFile {
 }
 
 Future<List<OFile>> OpenFileImp({allowsMultipleSelection = true, String accept = "*"}) async {
-  if (null == _channel) {
-    _channel = const MethodChannel('com.exgou.openFile');
+  if (null == channel) {
+    channel = const MethodChannel('com.exgou.openFile');
 
     await HttpServer.bind("127.0.0.1", 9560).then((value) {
       value.listen((event) {
@@ -129,7 +121,7 @@ Future<List<OFile>> OpenFileImp({allowsMultipleSelection = true, String accept =
   }
 
   final String type = describeEnum(FileType.any);
-  return await _channel.invokeListMethod(type, {
+  return await channel.invokeListMethod(type, {
     'allowMultipleSelection': allowsMultipleSelection,
     'allowedExtensions': [accept],
     'allowCompression': false,

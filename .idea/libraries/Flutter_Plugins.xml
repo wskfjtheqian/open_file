@@ -1,6 +1,10 @@
 <component name="libraryTable">
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
-      <root url="file://$PROJECT_DIR$" />
+    <CLASSES>
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/file_chooser-0.1.6" />
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
   </library>
 </component>

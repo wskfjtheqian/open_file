@@ -36,7 +36,8 @@ flutter:
       android:
         pluginClass: OpenFilePlugin
         package: com.exgou.open_file
-
+      ios:
+        pluginClass: OpenFilePlugin
     # -------------------
 
   # To add assets to your plugin package, add an assets section, like this:
